@@ -25,7 +25,15 @@ export default {
       fontSize: {
         title: '1.875rem',   // 30px
         subtitle: '1.25rem', // 20px
+      },animation: {
+        fadeIn: 'fadeIn 0.2s ease-in-out',
       },
+      keyframes: {
+        fadeIn: {
+          '0%': { opacity: 0 },
+          '100%': { opacity: 1 },
+        }
+      }
     },
   },
   plugins: [],

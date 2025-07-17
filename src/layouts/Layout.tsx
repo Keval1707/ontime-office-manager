@@ -1,16 +1,21 @@
-import type { ReactNode } from "react";
+import { useState } from "react";
 import Navbar from "../components/Navbar";
+import Sidebar from "../components/Sidebar";
+import { Outlet } from "react-router-dom";
 
-interface LayoutProps {
-  children: ReactNode;
-}
+const Layout = () => {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
-const Layout = ({ children }: LayoutProps) => {
   return (
-    <div className="flex font-roboto">
-      <div className="flex-1 min-h-screen bg-gray-100">
-        <Navbar />
-        <main className="p-6">{children}</main>
+    <div className="flex font-roboto bg-surface text-text">
+      <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+
+      <div className="flex-1 min-h-screen">
+        <Navbar onSidebarToggle={() => setSidebarOpen(true)} />
+
+        <main className="p-layout">
+          <Outlet />
+        </main>
       </div>
     </div>
   );
