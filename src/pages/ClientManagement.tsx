@@ -1,34 +1,13 @@
 import { useState } from 'react';
-import type { ClientFormData } from '../components/Forms/ClientForm';
+import type { ClientFormData } from '../components/data/Clints';
 import ClientForm from '../components/Forms/ClientForm';
 import ClientsTable from '../components/Tables/ClintsTable';
+import { useToast } from '../hooks/useToast';
+import { ClientEntry } from '../components/data/Clints';
 
 const ClientManagement = () => {
-    const [clients, setClients] = useState<ClientFormData[]>([
-        {
-            name: 'John Doe',
-            companyName: 'TechCorp',
-            phone: '123-456-7890',
-            email: 'john@techcorp.com',
-            address: '123 Tech St.',
-            serviceRequired: 'Web Development',
-            notes: 'VIP Client',
-            leadstatus: 'New',
-            updateOnWhatsApp: false,
-        },
-        {
-            name: 'Jane Smith',
-            companyName: 'DesignX',
-            phone: '987-654-3210',
-            email: 'jane@designx.com',
-            address: '456 Design Ave.',
-            serviceRequired: 'Graphic Design',
-            notes: 'Urgent project',
-            leadstatus: 'New',
-            updateOnWhatsApp: false,
-        },
-    ]);
-
+    const [clients, setClients] = useState<ClientFormData[]>(ClientEntry);
+    const toast = useToast();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editingIndex, setEditingIndex] = useState<number | null>(null);
 
@@ -42,8 +21,10 @@ const ClientManagement = () => {
             const updated = [...clients];
             updated[editingIndex] = { ...data, leadstatus: updated[editingIndex].leadstatus };
             setClients(updated);
+            toast("success", "Client updated successfully ✅");
         } else {
             setClients([...clients, { ...data, leadstatus: 'New' }]);
+            toast("success", "Client added successfully ✅");
         }
         setIsModalOpen(false);
         setEditingIndex(null);
@@ -53,15 +34,18 @@ const ClientManagement = () => {
         const updated = [...clients];
         updated[index].leadstatus = newStatus;
         setClients(updated);
+        toast("info", `Lead status changed to "${newStatus}"`);
     };
 
     const handleEditClick = (index: number) => {
         setEditingIndex(index);
         setIsModalOpen(true);
     };
-    
+
     const handleDelete = (index: number) => {
+        const deletedClient = clients[index];
         setClients(prev => prev.filter((_, i) => i !== index));
+        toast("error", `Deleted client: ${deletedClient.name}`);
     };
 
     return (

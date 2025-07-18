@@ -1,25 +1,7 @@
 import React, { useState, useMemo } from 'react';
+import type {ClientsTableProps} from '../data/Clints';
 
-interface Client {
-  name: string;
-  companyName: string;
-  phone: string;
-  email: string;
-  address: string;
-  serviceRequired: string;
-  notes: string;
-  leadstatus: string;
-  updateOnWhatsApp?: boolean;
-}
-
-interface ClientsTableProps {
-  clients: Client[];
-  onStatusChange: (index: number, newStatus: string) => void;
-  onEdit?: (index: number) => void;
-    handleDelete: (index: number) => void;
-}
-
-const ClientsTable: React.FC<ClientsTableProps> = ({ clients, onStatusChange, onEdit,handleDelete }) => {
+const ClientsTable: React.FC<ClientsTableProps> = ({ clients, onStatusChange, onEdit, handleDelete }) => {
   const [search, setSearch] = useState('');
   const [serviceFilter, setServiceFilter] = useState('');
 

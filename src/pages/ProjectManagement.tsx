@@ -1,34 +1,14 @@
-import { useState } from "react";
-import ProjectForm, { type ProjectFormData } from "../components/Forms/ProjectForm";
+import { useEffect, useState } from "react";
+import { type ProjectFormData, ProjectEntrys } from "../components/data/Project";
+import { ClientEntry } from "../components/data/Clints";
 import ProjectTable from "../components/Tables/ProjectTable";
 import Modal from "../components/Modal";
-
-const clientOptions = [
-  { id: "1", name: "Keval" },
-  { id: "2", name: "Keval Satani" },
-];
+import { useToast } from "../hooks/useToast";
+import ProjectForm from "../components/Forms/ProjectForm";
 
 const ProjectManagement = () => {
-  const [projects, setProjects] = useState<ProjectFormData[]>([
-    {
-      title: "Website Redesign",
-      client: "1",
-      startDate: "2025-07-01",
-      endDate: "2025-07-31",
-      progress: 45,
-      status: "Ongoing",
-      notes: "Focus on responsive design and performance.",
-    },
-    {
-      title: "Mobile App Launch",
-      client: "2",
-      startDate: "2025-06-15",
-      endDate: "2025-08-15",
-      progress: 80,
-      status: "Paused",
-      notes: "Awaiting client feedback on beta version.",
-    },
-  ]);
+  const [projects, setProjects] = useState<ProjectFormData[]>(ProjectEntrys);
+  const toast = useToast();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
@@ -49,12 +29,22 @@ const ProjectManagement = () => {
         ? prev.map((p, i) => (i === editingIndex ? data : p))
         : [...prev, data]
     );
+    toast(
+      editingIndex !== null ? "success" : "success",
+      editingIndex !== null
+        ? "Project updated successfully ✅"
+        : "Project added successfully ✅"
+    );
+
     handleCloseModal();
+
+  };
+  const handleDelete = (index: number) => {
+    const deleted = projects[index];
+    setProjects((prev) => prev.filter((_, i) => i !== index));
+    toast("error", `Deleted project: ${deleted.title}`);
   };
 
-  const handleDelete = (index: number) => {
-    setProjects((prev) => prev.filter((_, i) => i !== index));
-  };
 
   return (
     <div className="space-y-4">
@@ -68,10 +58,13 @@ const ProjectManagement = () => {
         </button>
       </div>
 
+
       <ProjectTable
         projects={projects.map((p) => ({
           ...p,
-          client: clientOptions.find((c) => c.id === p.client)?.name || p.client,
+          client:
+            ClientEntry.find((c) => c.id === Number(p.client))?.name || p.client,
+
         }))}
         onEdit={openModal}
         onDelete={handleDelete}
@@ -83,7 +76,7 @@ const ProjectManagement = () => {
           onSubmit={handleSubmit}
           onCancel={handleCloseModal}
           statusOptions={["Ongoing", "Paused", "Completed"]}
-          clientOptions={clientOptions}
+          clientOptions={ClientEntry}
         />
       </Modal>
     </div>

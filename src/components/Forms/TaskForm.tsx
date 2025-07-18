@@ -1,32 +1,11 @@
 import { useState, useEffect, type ChangeEvent } from 'react';
-
-export interface TaskFormData {
-  title: string;
-  description: string;
-  deadline: string;
-  priority: 'Low' | 'Medium' | 'High';
-  relatedClient?: string;
-  status: 'Pending' | 'In Progress' | 'Done' | 'Archived';
-}
-
-interface ClientOption {
-  id: string;
-  name: string;
-}
-
-interface TaskFormProps {
-  onSubmit: (data: TaskFormData) => void;
-  initialData?: TaskFormData;
-  onCancel: () => void;
-  TaskStatusOptions?: string[];
-  clientOptions?: ClientOption[];
-}
+import type{ TaskFormData ,TaskFormProps} from "../data/Task"
 
 const TaskForm = ({
   onSubmit,
   initialData,
   onCancel,
-  TaskStatusOptions = ['Pending', 'In Progress', 'Done', 'Archived'],
+  TaskStatusOptions = [],
   clientOptions = [],
 }: TaskFormProps) => {
   const [form, setForm] = useState<TaskFormData>({
@@ -34,7 +13,7 @@ const TaskForm = ({
     description: '',
     deadline: '',
     priority: 'Medium',
-    status: 'Pending',
+    status: TaskStatusOptions.length > 0 ? TaskStatusOptions[0].status : '',
     relatedClient: '',
   });
 
@@ -109,9 +88,12 @@ const TaskForm = ({
           onChange={handleChange}
           className="input"
         >
-          {TaskStatusOptions.map((status) => (
-            <option key={status} value={status}>{status}</option>
+          {TaskStatusOptions.map((option) => (
+            <option key={option.id} value={option.status}>
+              {option.status}
+            </option>
           ))}
+
         </select>
 
         <div className="relative md:col-span-2">

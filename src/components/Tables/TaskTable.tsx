@@ -1,18 +1,5 @@
 import { useMemo, useState } from 'react';
-import type { TaskFormData } from '../Forms/TaskForm';
-
-interface Props {
-  tasks: TaskFormData[];
-  onEdit: (index: number) => void;
-  onDelete: (index: number) => void;
-}
-
-const statusColor = {
-  'Pending': 'text-yellow-600',
-  'In Progress': 'text-blue-600',
-  'Done': 'text-green-600',
-  'Archived': 'text-gray-400',
-};
+import type { TaskFormData,TaskProps } from '../data/Task';
 
 const priorityBadge = {
   'Low': 'bg-green-100 text-green-700',
@@ -20,7 +7,7 @@ const priorityBadge = {
   'High': 'bg-red-100 text-red-700',
 };
 
-const TaskTable = ({ tasks, onEdit, onDelete }: Props) => {
+const TaskTable = ({ tasks, onEdit, onDelete,handleStatusChange, status }: TaskProps) => {
   const [search, setSearch] = useState('');
   const [priorityFilter, setPriorityFilter] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
@@ -124,8 +111,19 @@ const TaskTable = ({ tasks, onEdit, onDelete }: Props) => {
                     </span>
                   </td>
                   <td className="px-4 py-2">
-                    <span className={`font-medium ${statusColor[t.status]}`}>{t.status}</span>
+                    <select
+                      value={t.status}
+                      onChange={(e) => handleStatusChange(i, e.target.value)}
+                      className="border border-gray-300 rounded px-2 py-1 text-xs bg-white"
+                    >
+                      {status.map((s) => (
+                        <option key={s.id} value={s.status}>
+                          {s.status}
+                        </option>
+                      ))}
+                    </select>
                   </td>
+
                   <td className="px-4 py-2">{t.relatedClient || '-'}</td>
                   <td className="px-4 py-2 space-x-2">
                     <button onClick={() => onEdit(i)} className="text-blue-500 hover:underline">Edit</button>
@@ -152,7 +150,7 @@ const TaskTable = ({ tasks, onEdit, onDelete }: Props) => {
               <div className="text-sm text-gray-500">{t.description}</div>
               <div className="text-xs mt-1">
                 <span className={`${priorityBadge[t.priority]} px-2 py-1 rounded mr-2`}>{t.priority}</span>
-                <span className={statusColor[t.status]}>{t.status}</span>
+                <span>{t.status}</span>
               </div>
             </div>
           )) : <p className="text-gray-500">No tasks for today.</p>}

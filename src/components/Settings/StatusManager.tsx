@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Pencil, Trash2, Check, X } from "lucide-react";
+import { useToast } from "../../hooks/useToast";
 
 export interface StatusItem {
   name: string;
@@ -9,7 +10,7 @@ export interface StatusItem {
 interface StatusManagerProps {
   title: string;
   initialStatuses: StatusItem[];
-  onUpdate?: (statuses: StatusItem[]) => void; // optional callback
+  onUpdate?: (statuses: StatusItem[]) => void; 
 }
 
 const StatusManager = ({ title, initialStatuses, onUpdate }: StatusManagerProps) => {
@@ -19,6 +20,7 @@ const StatusManager = ({ title, initialStatuses, onUpdate }: StatusManagerProps)
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
   const [editName, setEditName] = useState("");
   const [editDesc, setEditDesc] = useState("");
+  const toast = useToast()
 
   const handleAdd = () => {
     const trimmed = newName.trim();
@@ -26,8 +28,11 @@ const StatusManager = ({ title, initialStatuses, onUpdate }: StatusManagerProps)
       const updated = [...statuses, { name: trimmed, desc: newDesc.trim() }];
       setStatuses(updated);
       onUpdate?.(updated);
+      toast("success", "Status added successfully.")
       setNewName("");
       setNewDesc("");
+    } else {
+      toast("error", "Status name is required or already exists.");
     }
   };
 
@@ -35,6 +40,7 @@ const StatusManager = ({ title, initialStatuses, onUpdate }: StatusManagerProps)
     const updated = statuses.filter((_, i) => i !== index);
     setStatuses(updated);
     onUpdate?.(updated);
+    toast("error", "Status deleted.")
   };
 
   const handleEdit = (index: number) => {
@@ -51,6 +57,7 @@ const StatusManager = ({ title, initialStatuses, onUpdate }: StatusManagerProps)
       setStatuses(updated);
       onUpdate?.(updated);
       setEditingIndex(null);
+      toast("info", "Status updated.")
       setEditName("");
       setEditDesc("");
     }

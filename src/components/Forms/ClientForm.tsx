@@ -1,16 +1,5 @@
 import { useState, useEffect } from 'react';
-
-export interface ClientFormData {
-  name: string;
-  companyName: string;
-  phone: string;
-  email: string;
-  address: string;
-  serviceRequired: string;
-  notes: string;
-  leadstatus: string;
-  updateOnWhatsApp?: boolean;
-}
+import {type ClientFormData} from '../data/Clints'
 
 interface Props {
   onSubmit: (data: ClientFormData) => void;

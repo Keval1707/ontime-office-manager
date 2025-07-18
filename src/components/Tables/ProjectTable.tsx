@@ -1,11 +1,5 @@
 import { Pencil, Trash2 } from "lucide-react";
-import type { ProjectFormData } from "../Forms/ProjectForm";
-
-interface ProjectTableProps {
-  projects: ProjectFormData[];
-  onEdit: (index: number) => void;
-  onDelete: (index: number) => void;
-}
+import type { ProjectTableProps } from "../data/Project";
 
 const ProjectTable = ({ projects, onEdit, onDelete }: ProjectTableProps) => {
   return (

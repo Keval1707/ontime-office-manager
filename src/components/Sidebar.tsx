@@ -1,6 +1,8 @@
 import { NavLink } from "react-router-dom";
 import { ChevronDown, ChevronUp, X } from "lucide-react";
 import { useState } from "react";
+import { logoutUser } from "../utils/auth";
+import { useNavigate } from "react-router-dom";
 
 interface SidebarProps {
   isOpen: boolean;
@@ -9,6 +11,7 @@ interface SidebarProps {
 
 const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
   const [settingsOpen, setSettingsOpen] = useState(false);
+  const navigate = useNavigate();
 
   const linkStyle =
     "block px-4 py-2 text-sm font-medium rounded transition text-sidebarText hover:bg-hover";
@@ -16,9 +19,8 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
 
   return (
     <aside
-      className={`fixed lg:static top-0 left-0 z-50 w-64 min-h-screen bg-sidebar p-layout border-r border-border transform transition-transform duration-200 ease-in-out animation-fadeIn ${
-        isOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
-      }`}
+      className={`fixed lg:static top-0 left-0 z-50 w-64 min-h-screen bg-sidebar p-layout border-r border-border transform transition-transform duration-200 ease-in-out animation-fadeIn ${isOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
+        }`}
     >
       <div className="lg:hidden flex justify-end mb-4">
         <button onClick={onClose}>
@@ -66,6 +68,15 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
           }
         >
           Projects
+        </NavLink>
+        <NavLink
+          to="/payments"
+          onClick={onClose}
+          className={({ isActive }) =>
+            isActive ? `${linkStyle} ${activeStyle}` : linkStyle
+          }
+        >
+          Payments
         </NavLink>
 
         {/* 🔽 Settings Dropdown */}
@@ -124,9 +135,18 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
           )}
         </div>
 
-        <NavLink to="/logout" className={linkStyle} onClick={onClose}>
-          Logout
-        </NavLink>
+        <button
+  className={`${linkStyle} w-full text-left`}
+  onClick={() => {
+    logoutUser();
+    onClose?.();
+    navigate("/login");
+  }}
+>
+  Logout
+</button>
+
+
       </nav>
     </aside>
   );

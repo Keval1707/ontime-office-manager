@@ -1,27 +1,5 @@
 import { useState, useEffect } from "react";
-
-export interface ProjectFormData {
-  title: string;
-  client: string;
-  startDate: string;
-  endDate: string;
-  progress: number;
-  status: "Ongoing" | "Paused" | "Completed";
-  notes?: string;
-}
-
-interface ClientOption {
-  id: string;
-  name: string;
-}
-
-export interface ProjectFormProps {
-  defaultValues?: ProjectFormData;
-  statusOptions: string[];
-  clientOptions: ClientOption[];
-  onSubmit: (data: ProjectFormData) => void;
-  onCancel: () => void;
-}
+import type { ProjectFormData, ProjectFormProps } from "../data/Project";
 
 const ProjectForm = ({
   defaultValues,
