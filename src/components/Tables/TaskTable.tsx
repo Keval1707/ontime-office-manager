@@ -11,7 +11,7 @@ const TaskTable = ({ tasks, onEdit, onDelete,handleStatusChange, status }: TaskP
   const [search, setSearch] = useState('');
   const [priorityFilter, setPriorityFilter] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
-  const [dateFilter, setDateFilter] = useState('');
+  const [dateFilter] = useState('');
   const [view, setView] = useState<'table' | 'daily' | 'calendar'>('table');
 
   const filteredTasks = useMemo(() => {

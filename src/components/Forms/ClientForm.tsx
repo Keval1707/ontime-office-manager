@@ -9,6 +9,7 @@ interface Props {
 
 const ClientForm = ({ onSubmit, initialData = {}, onCancel }: Props) => {
   const [form, setForm] = useState<ClientFormData>({
+    id:0,
     name: '', companyName: '', phone: '', email: '',
     address: '', serviceRequired: '', notes: '',
     leadstatus: 'New', updateOnWhatsApp: false,
