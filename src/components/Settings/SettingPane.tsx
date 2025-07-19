@@ -16,12 +16,12 @@ const SettingPanel = ({ type }: Props) => {
             case "notifications":
                 return <div>Notification Settings</div>;
             default:
-                return <div>Invalid setting selected</div>;
+                return <div className="text-red-600 font-semibold">Invalid setting selected {type}</div>;
         }
     };
 
     return (
-        <div className="flex-1 bg-surface p-6 rounded-xl shadow-md">
+        <div className="flex-1 bg-surface p-6 rounded-xl shadow-md animation-fadeIn">
             {renderContent()}
         </div>
     );

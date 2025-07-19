@@ -1,15 +1,17 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { type ProjectFormData, ProjectEntrys } from "../components/data/Project";
 import { ClientEntry } from "../components/data/Clints";
 import ProjectTable from "../components/Tables/ProjectTable";
 import Modal from "../components/Modal";
 import { useToast } from "../hooks/useToast";
 import ProjectForm from "../components/Forms/ProjectForm";
+import { useParams,useNavigate } from 'react-router-dom';
 
 const ProjectManagement = () => {
   const [projects, setProjects] = useState<ProjectFormData[]>(ProjectEntrys);
   const toast = useToast();
-
+  const { projectid } = useParams();
+  const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
 
@@ -21,6 +23,9 @@ const ProjectManagement = () => {
   const handleCloseModal = () => {
     setIsModalOpen(false);
     setEditingIndex(null);
+    if (projectid) {
+    navigate("/projects", { replace: true }); // remove `/newtask` or `/tasks/:id`
+  }
   };
 
   const handleSubmit = (data: ProjectFormData) => {
@@ -44,6 +49,16 @@ const ProjectManagement = () => {
     setProjects((prev) => prev.filter((_, i) => i !== index));
     toast("error", `Deleted project: ${deleted.title}`);
   };
+  useEffect(() => {
+    if (!projectid) return;
+
+    if (projectid === "newproject") {
+      openModal();
+    } else {
+      const index = projects.findIndex((project) => project.title === projectid);
+      if (index !== -1) openModal(index);
+    }
+  }, [projectid]);
 
 
   return (

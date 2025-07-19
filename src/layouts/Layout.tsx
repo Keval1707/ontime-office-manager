@@ -4,15 +4,20 @@ import Sidebar from "../components/Sidebar";
 import { Outlet } from "react-router-dom";
 
 const Layout = () => {
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
+  const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false); // 👈 Add this
 
   return (
-    <div className="flex font-roboto bg-surface text-text">
-      <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+    <div className="flex font-roboto bg-surface text-text min-h-screen">
+      <Sidebar
+        isCollapsed={isSidebarCollapsed}
+        toggleCollapse={() => setIsSidebarCollapsed((prev) => !prev)}
+        isMobileOpen={isMobileSidebarOpen}             // 👈 Pass down to Sidebar
+        setIsMobileOpen={setIsMobileSidebarOpen}       // 👈 Pass control function
+      />
 
-      <div className="flex-1 min-h-screen">
-        <Navbar onSidebarToggle={() => setSidebarOpen(true)} />
-
+      <div className="flex-1">
+        <Navbar onSidebarToggle={() => setIsMobileSidebarOpen((prev) => !prev)} /> {/* 👈 Controls mobile sidebar */}
         <main className="p-layout">
           <Outlet />
         </main>

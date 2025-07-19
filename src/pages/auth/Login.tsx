@@ -16,7 +16,7 @@ const Login = () => {
     e.preventDefault();
     const success = loginUser(email, password);
     if (success) {
-      navigate("/");
+      navigate("/dashboard");
     } else {
       setError("Invalid email or password.");
     }

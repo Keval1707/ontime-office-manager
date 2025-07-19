@@ -5,10 +5,16 @@ const CURRENT_USER_KEY = "ontime-current-user";
 export function isLoggedIn(): boolean {
   return !!localStorage.getItem(CURRENT_USER_KEY);
 }
+export function usename(): string {
+  const userStr = localStorage.getItem(CURRENT_USER_KEY);
+  if (!userStr) return "";
+  const user = JSON.parse(userStr);
+  return user.name || "";
+}
 
 // Register a new user
-export function registerUser(email: string, password: string): boolean {
-  const user = { email, password };
+export function registerUser(name: string,email: string, password: string): boolean {
+  const user = { name,email, password };
   localStorage.setItem(USER_KEY, JSON.stringify(user));
   return true;
 }

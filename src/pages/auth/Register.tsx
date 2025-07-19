@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { isLoggedIn, registerUser } from "../../utils/auth";
 
 const Register = () => {
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
@@ -13,7 +14,7 @@ const Register = () => {
 
   const handleRegister = (e: React.FormEvent) => {
     e.preventDefault();
-    const success = registerUser(email, password);
+    const success = registerUser(name,email, password);
     if (success) {
       navigate("/login"); // ✅ after register, go to login
     }
@@ -27,6 +28,14 @@ const Register = () => {
       >
         <h2 className="text-title font-bold mb-6 text-center">Register</h2>
 
+        <input
+          type="name"
+          className="w-full border border-border p-3 rounded-xl mb-4 focus:outline-none"
+          placeholder="name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          required
+        />
         <input
           type="email"
           className="w-full border border-border p-3 rounded-xl mb-4 focus:outline-none"
